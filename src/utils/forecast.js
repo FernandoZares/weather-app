@@ -5,7 +5,9 @@ const forecast = (latitude, longitude, callback) => {
 
     request({ url, json: true }, (error, { body }) => { //Destructured from response.body.somethingElse
         const summary = body.daily.data[0].summary
-        const temp = body.currently.temperature
+        const min = Math.round(body.daily.data[0].temperatureLow)
+        const max = Math.round(body.daily.data[0].temperatureHigh)
+        const temp = Math.round(body.currently.temperature)
         const precip = body.currently.precipProbability
 
         if (error) {
@@ -13,7 +15,7 @@ const forecast = (latitude, longitude, callback) => {
         } else if (body.error) {
             callback('Unable to find location', undefined)
         } else {
-            callback(undefined, `${summary} It is currently ${temp}°C out and there is a ${precip}% chance of rain today.`) 
+            callback(undefined, `${summary} It is currently ${temp}°C. There is a ${precip}% chance of rain today. The low temperature today will be ${min}°C and the max will be ${max}°C`) 
         }
     })
 }
